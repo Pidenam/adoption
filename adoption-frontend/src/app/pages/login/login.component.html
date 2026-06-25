@@ -1,0 +1,120 @@
+<div class="page-bg">
+  <div class="bg-circle1"></div>
+  <div class="bg-circle2"></div>
+  <div class="bg-circle3"></div>
+
+  <div class="card">
+
+    <div class="left">
+      <div class="circle1"></div>
+      <div class="circle2"></div>
+
+      <div>
+        <div class="flag-deco">
+          <span class="fd" style="background:#006633"></span>
+          <span class="fd" style="background:#FFD100"></span>
+          <span class="fd" style="background:#CC0000"></span>
+          <span class="fd" style="background:#FFD100"></span>
+          <span class="fd" style="background:#006633"></span>
+        </div>
+        <div class="left-badge">RÉPUBLIQUE TOGOLAISE</div>
+        <div class="left-icon"></div>
+        <h1 class="left-title">Système de Gestion Automatisée des Opérations d'Adoptions </h1>
+        <p class="left-sub">
+          Plateforme officielle du Comité National chargé de la
+          gestion automatisée des opérations d'adoption au Togo.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-n">156</div>
+            <div class="stat-l">Dossiers traités</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">89</div>
+            <div class="stat-l">Adoptions validées</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">23</div>
+            <div class="stat-l">Orphelins disponibles</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="left-foot">
+        Ministère de l'Action Sociale · Lomé, Togo<br>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="togo-stripe">
+        <span style="background:#006633"></span>
+        <span style="background:#FFD100"></span>
+        <span style="background:#CC0000"></span>
+        <span style="background:#FFD100"></span>
+        <span style="background:#006633"></span>
+      </div>
+
+      <div class="uc-badge">Accès réservé au personnel</div>
+
+      <div class="form-head">
+        <h2>Bienvenue</h2>
+        <p>Connectez-vous à votre espace de travail officiel</p>
+      </div>
+
+      <div class="field">
+        <label>ADRESSE EMAIL PROFESSIONNELLE</label>
+        <div class="finput">
+          <span class="icon"></span>
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="abalo@gmail.com"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>MOT DE PASSE</label>
+        <div class="finput">
+          <span class="icon"></span>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="motDePasse"
+            placeholder="••••••••"
+          />
+          <span class="eye" (click)="togglePassword()">
+            <mat-icon>
+                {{ showPassword ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
+            </span>
+        </div>
+      </div>
+
+      <div class="forgot">
+        <a href="#">Mot de passe oublié ?</a>
+      </div>
+
+      <button class="btn" (click)="onSubmit()">
+        → Se connecter
+      </button>
+
+      <div class="sep">
+        <span class="sep-line"></span>
+        <span class="sep-txt"></span>
+        <span class="sep-line"></span>
+      </div>
+
+      <div class="roles">
+        <div class="role-pill">
+          <span style="color:#006633"></span>
+          Président du Comité
+        </div>
+        <div class="role-pill">
+          <span></span>
+          Secrétaire · Agent Social · 
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,167 @@
+<div class="page-bg">
+  <div class="bg-circle1"></div>
+  <div class="bg-circle2"></div>
+  <div class="bg-circle3"></div>
+
+  <div class="card">
+
+    <div class="left">
+      <div class="circle1"></div>
+      <div class="circle2"></div>
+
+      <div>
+        <div class="flag-deco">
+          <span class="fd" style="background:#006633"></span>
+          <span class="fd" style="background:#FFD100"></span>
+          <span class="fd" style="background:#CC0000"></span>
+          <span class="fd" style="background:#FFD100"></span>
+          <span class="fd" style="background:#006633"></span>
+        </div>
+        <div class="left-badge">RÉPUBLIQUE TOGOLAISE</div>
+        <div class="left-icon"></div>
+        <h1 class="left-title">Donnez un foyer<br>à un enfant</h1>
+        <p class="left-sub">
+        </p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-txt">Créez votre compte adoptant</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-txt">Soumettez votre dossier en ligne</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-txt">Suivez l'avancement en temps réel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="left-foot">
+        Ministère de l'Action Sociale · Lomé, Togo<br>
+      </div>
+    </div>
+
+    <div class="right">
+
+      <div class="togo-stripe">
+        <span style="background:#006633"></span>
+        <span style="background:#FFD100"></span>
+        <span style="background:#CC0000"></span>
+        <span style="background:#FFD100"></span>
+        <span style="background:#006633"></span>
+      </div>
+
+      <div class="uc-badge">Espace adoptant</div>
+      <div class="tab-row">
+        <div
+          class="tab"
+          [class.on]="onglet === 'connexion'"
+          (click)="switchOnglet('connexion')"
+        >Se connecter</div>
+        <div
+          class="tab"
+          [class.on]="onglet === 'inscription'"
+          (click)="switchOnglet('inscription')"
+        >S'inscrire</div>
+      </div>
+
+      <div *ngIf="onglet === 'connexion'">
+        <div class="form-head">
+          <h2>Bon retour</h2>
+          <p>Connectez-vous à votre espace adoptant</p>
+        </div>
+        <div class="field">
+          <label>ADRESSE EMAIL</label>
+          <div class="finput">
+            <span class="icon"></span>
+            <input type="email" [(ngModel)]="loginEmail" placeholder="votre@email.com"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>MOT DE PASSE</label>
+          <div class="finput">
+            <span class="icon"></span>
+            <input [type]="showLoginPassword ? 'text' : 'password'" [(ngModel)]="loginPassword" placeholder="••••••••"/>
+             <span class="eye" (click)="toggleLoginPassword()">
+            <mat-icon>
+                {{ showLoginPassword ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
+            </span>
+          </div>
+        </div>
+        <div class="forgot"><a href="#">Mot de passe oublié ?</a></div>
+        <button class="btn" (click)="onLogin()">→ Se connecter</button>
+        <div class="bottom-link">
+          Pas encore de compte ?
+          <a (click)="switchOnglet('inscription')">S'inscrire</a>
+        </div>
+      </div>
+
+      <div *ngIf="onglet === 'inscription'">
+        <div class="form-head">
+          <h2>Créer un compte</h2>
+          <p>Remplissez le formulaire pour commencer votre démarche</p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>NOM</label>
+            <div class="finput">
+              <input type="text" [(ngModel)]="inscription.nom" placeholder="TCHODOU"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>PRÉNOM</label>
+            <div class="finput">
+              <input type="text" [(ngModel)]="inscription.prenom" placeholder="Reine"/>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>ADRESSE EMAIL</label>
+          <div class="finput">
+            <span class="icon"></span>
+            <input type="email" [(ngModel)]="inscription.email" placeholder="votre@email.com"/>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>TÉLÉPHONE</label>
+            <div class="finput">
+              <span class="icon"></span>
+              <input type="tel" [(ngModel)]="inscription.telephone" placeholder="+228 90 00 00 00"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>SITUATION</label>
+            <div class="finput">
+              <select [(ngModel)]="inscription.situationMatrimoniale">
+                <option value="">Choisir...</option>
+                <option *ngFor="let s of situationsDisponibles" [value]="s">{{s}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>MOT DE PASSE</label>
+          <div class="finput">
+            <span class="icon"></span>
+            <input [type]="showInscriptionPassword ? 'text' : 'password'" [(ngModel)]="inscription.motDePasse" placeholder="••••••••"/>
+            <span class="eye" (click)="toggleInscriptionPassword()">
+            <mat-icon>
+                {{ showInscriptionPassword ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
+            </span>
+          </div>
+        </div>
+        <button class="btn" (click)="onInscrire()"> Créer mon compte</button>
+        <div class="bottom-link">
+          Déjà un compte ?
+          <a (click)="switchOnglet('connexion')">Se connecter</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

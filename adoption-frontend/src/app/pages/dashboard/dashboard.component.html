@@ -1,0 +1,186 @@
+<div class="dash">
+
+  <div class="stats">
+
+    <div class="sc" *ngFor="let s of statsCards">
+      <div class="sc-top">
+        <div class="sc-icon" [ngClass]="s.color">
+          <i [class]="s.icon"></i>
+        </div>
+        <div class="sc-trend" [ngClass]="s.trendType">
+          <i [class]="s.trendType === 'up' ? 'ti ti-trending-up' : 'ti ti-trending-down'"></i>
+          {{ s.trend }}
+        </div>
+      </div>
+      <div class="sc-n">{{ s.valeur }}</div>
+      <div class="sc-l">{{ s.label }}</div>
+      <div class="sparkline">
+        <svg viewBox="0 0 100 24" style="width:100%;height:24px">
+          <polyline
+            [attr.points]="s.sparkline"
+            fill="none"
+            [attr.stroke]="s.strokeColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <polyline
+            [attr.points]="s.sparklineFill"
+            [attr.fill]="s.strokeColor"
+            fill-opacity="0.08"
+          />
+        </svg>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <i class="ti ti-chart-line"></i> Évolution des adoptions
+        </div>
+        <div class="card-actions">
+          <div class="filter-pills">
+            <div class="fpill"
+              *ngFor="let p of periodeFiltres"
+              [class.on]="periodeActive === p"
+              (click)="periodeActive = p">{{ p }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-legend">
+          <div class="cl-item">
+            <div class="cl-dot" style="background:#006633"></div>
+            Adoptions validées
+          </div>
+          <div class="cl-item">
+            <div class="cl-dot" style="background:#FFD100;"></div>
+            Dossiers soumis
+          </div>
+        </div>
+        <svg viewBox="0 0 380 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:85px">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#006633" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#006633" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFD100" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#FFD100" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="20" x2="380" y2="20" stroke="#f0f2f5" stroke-width="1"/>
+          <line x1="0" y1="50" x2="380" y2="50" stroke="#f0f2f5" stroke-width="1"/>
+          <line x1="0" y1="80" x2="380" y2="80" stroke="#f0f2f5" stroke-width="1"/>
+         
+          <path d="M 15 55 C 55 55 65 30 85 35 C 105 40 130 20 155 22 C 180 24 205 45 230 28 C 255 11 280 50 310 32 C 340 14 355 38 365 34 L 365 85 L 15 85 Z" fill="url(#g2)"/>
+          <path d="M 15 55 C 55 55 65 30 85 35 C 105 40 130 20 155 22 C 180 24 205 45 230 28 C 255 11 280 50 310 32 C 340 14 355 38 365 34" fill="none" stroke="#FFD100" stroke-width="2" stroke-linecap="round" stroke-dasharray="5,3"/>
+    
+          <path d="M 15 70 C 55 70 65 45 85 48 C 105 51 130 28 155 32 C 180 36 205 55 230 38 C 255 21 280 58 310 42 C 340 26 355 50 365 46 L 365 85 L 15 85 Z" fill="url(#g1)"/>
+          <path d="M 15 70 C 55 70 65 45 85 48 C 105 51 130 28 155 32 C 180 36 205 55 230 38 C 255 21 280 58 310 42 C 340 26 355 50 365 46" fill="none" stroke="#006633" stroke-width="2.5" stroke-linecap="round"/>
+       
+          <circle cx="15" cy="70" r="3" fill="white" stroke="#006633" stroke-width="2"/>
+          <circle cx="85" cy="48" r="3" fill="white" stroke="#006633" stroke-width="2"/>
+          <circle cx="155" cy="32" r="3" fill="white" stroke="#006633" stroke-width="2"/>
+          <circle cx="230" cy="38" r="3" fill="white" stroke="#006633" stroke-width="2"/>
+          <circle cx="310" cy="42" r="3" fill="white" stroke="#006633" stroke-width="2"/>
+          <circle cx="365" cy="46" r="4" fill="#006633" stroke="white" stroke-width="2"/>
+         
+          <rect x="338" y="28" width="40" height="16" rx="4" fill="#1a1a2e" opacity="0.85"/>
+          <text x="358" y="39" text-anchor="middle" font-size="8" fill="white" font-weight="700">Juin: 7</text>
+        </svg>
+        <div class="chart-labels">
+          <span *ngFor="let m of moisLabels" class="chart-label">{{ m }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title"><i class="ti ti-chart-donut"></i> Statut des dossiers</div>
+      </div>
+      <div class="donut-wrap">
+        <svg viewBox="0 0 80 80" style="width:76px;height:76px;flex-shrink:0">
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#f0f2f5" stroke-width="12"/>
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#006633" stroke-width="12"
+            stroke-dasharray="70 106" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#FFD100" stroke-width="12"
+            stroke-dasharray="35 141" stroke-dashoffset="-70" transform="rotate(-90 40 40)"/>
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#1565c0" stroke-width="12"
+            stroke-dasharray="20 156" stroke-dashoffset="-105" transform="rotate(-90 40 40)"/>
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#CC0000" stroke-width="12"
+            stroke-dasharray="11 165" stroke-dashoffset="-125" transform="rotate(-90 40 40)"/>
+          <text x="40" y="37" text-anchor="middle" font-size="11" font-weight="700" fill="#1a1a2e">23</text>
+          <text x="40" y="48" text-anchor="middle" font-size="7" fill="#9aa0a6">dossiers</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="legend-item" *ngFor="let d of donutData">
+            <div class="legend-dot" [style.background]="d.couleur"></div>
+            {{ d.label }}
+            <span class="legend-val">{{ d.valeur }}<span class="legend-pct"> {{ d.pct }}%</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title"><i class="ti ti-folder-open"></i> Derniers dossiers</div>
+        <div class="card-actions">
+          <div class="filter-pills">
+            <div class="fpill"
+              *ngFor="let f of dossierFiltres"
+              [class.on]="dossierFiltreActif === f.val"
+              (click)="dossierFiltreActif = f.val">{{ f.label }}</div>
+          </div>
+          <div class="card-action">Voir tout →</div>
+        </div>
+      </div>
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th>ADOPTANT</th><th>ORPHELIN</th><th>DATE</th><th>STATUT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of getDossiersFiltres()">
+            <td>{{ d.adoptant }}</td>
+            <td>{{ d.orphelin }}</td>
+            <td>{{ d.date }}</td>
+            <td><span class="pill" [ngClass]="getStatutClass(d.statut)">{{ d.statut }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title"><i class="ti ti-clock"></i> Activité récente</div>
+        <div class="card-action">Voir tout →</div>
+      </div>
+      <div class="act-list">
+        <div class="act-item" *ngFor="let a of activites; let i = index">
+          <div class="act-icon" [style.background]="a.bg" [style.color]="a.color">
+            <i [class]="a.icon"></i>
+          </div>
+          <div>
+            <div class="act-txt">{{ a.texte }}</div>
+            <div class="act-time">
+              <span class="live-dot" *ngIf="i === 0"></span>
+              {{ i === 0 ? 'En direct' : a.temps }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

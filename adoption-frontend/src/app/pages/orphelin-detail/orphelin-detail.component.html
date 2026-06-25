@@ -1,0 +1,90 @@
+<div class="detail-page" *ngIf="orphelin">
+
+  <div class="breadcrumb">
+    <span class="link" (click)="retour()">
+      <i class="ti ti-arrow-left"></i> Dossiers orphelins
+    </span>
+    <i class="ti ti-chevron-right"></i>
+    <span>Détail du dossier</span>
+  </div>
+
+  <div class="detail-layout">
+
+    <div class="detail-card main">
+      <div class="detail-head">
+        <div class="detail-av" [ngClass]="getAvatarClass()">{{ getInitiales() }}</div>
+        <div>
+          <div class="detail-name">{{ orphelin.nom }} {{ orphelin.prenom }}</div>
+          <div class="detail-num">{{ orphelin.numeroDossier }}</div>
+          <span class="status-pill" [ngClass]="getStatutClass()">
+            {{ getStatutLabel(orphelin.statut) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="detail-sec">
+        <div class="sec-t">Identité de l'enfant</div>
+        <div class="detail-grid">
+          <div class="ditem"><div class="k">Nom complet</div><div class="v">{{ orphelin.nom }} {{ orphelin.prenom }}</div></div>
+          <div class="ditem"><div class="k">Âge</div><div class="v">{{ orphelin.age }} ans</div></div>
+          <div class="ditem"><div class="k">Sexe</div><div class="v">{{ orphelin.sexe }}</div></div>
+          <div class="ditem"><div class="k">Situation familiale</div><div class="v">{{ orphelin.situationFamiliale }}</div></div>
+          <div class="ditem"><div class="k">Niveau scolarisation</div><div class="v">{{ orphelin.niveauScolarisation }}</div></div>
+          <div class="ditem"><div class="k">État de santé</div><div class="v">{{ orphelin.etatSante || 'Non renseigné' }}</div></div>
+        </div>
+      </div>
+
+      <div class="detail-sec">
+        <div class="sec-t">Origine & accueil</div>
+        <div class="detail-grid">
+          <div class="ditem"><div class="k">Région d'origine</div><div class="v">{{ orphelin.regionOrigine }}</div></div>
+          <div class="ditem"><div class="k">Ville d'origine</div><div class="v">{{ orphelin.villeOrigine || 'Non renseigné' }}</div></div>
+          <div class="ditem"><div class="k">Structure d'accueil</div><div class="v">{{ orphelin.structureAccueil || 'Non renseigné' }}</div></div>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button class="b-back" (click)="retour()">Retour</button>
+        <button class="b-edit" (click)="modifier()">
+          <i class="ti ti-edit"></i> Modifier le dossier
+        </button>
+      </div>
+    </div>
+
+    <div class="detail-side">
+      <div class="detail-card">
+        <div class="detail-sec">
+          <div class="sec-t">Documents justificatifs</div>
+
+          <div class="empty-doc" *ngIf="documents.length === 0">
+            <i class="ti ti-folder-off"></i>
+            Aucun document
+          </div>
+
+          <div class="doc-card" *ngFor="let doc of documents">
+            <div class="doc-th" [ngClass]="classeIcone(doc.format)">
+              <i [class]="iconeFichier(doc.format)"></i>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-t">{{ getLabelType(doc.typeDocument) }}</div>
+              <div class="doc-s">{{ doc.format | uppercase }} — {{ formaterTaille(doc.taille) }}</div>
+            </div>
+            <div class="doc-acts">
+              <div class="doc-b" *ngIf="estImage(doc.format) || estPdf(doc.format)"
+                   (click)="ouvrirDocument(doc)" title="Ouvrir">
+                <i class="ti ti-eye"></i>
+              </div>
+              <div class="doc-b" (click)="telecharger(doc)" title="Télécharger">
+                <i class="ti ti-download"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="chargement">
+  <i class="ti ti-loader-2"></i> Chargement...
+</div>

@@ -1,0 +1,230 @@
+<div class="page" (click)="fermerMenus()">
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1><i class="ti ti-baby-carriage"></i> Dossiers des orphelins</h1>
+      <p>Gérez les dossiers des enfants du Comité National d'Adoption</p>
+    </div>
+    <button class="btn-create" (click)="creerOrphelin()">
+      <i class="ti ti-plus"></i> Nouveau dossier
+    </button>
+  </div>
+
+  <div class="mini-stats">
+    <div class="ms">
+      <div class="ms-icon" style="background:#e8f5e9;color:#006633">
+        <i class="ti ti-files"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ orphelins.length }}</div>
+        <div class="ms-l">Total</div>
+      </div>
+    </div>
+    <div class="ms">
+      <div class="ms-icon" style="background:#e8f5e9;color:#0F6E56">
+        <i class="ti ti-circle-check"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ totalDisponibles }}</div>
+        <div class="ms-l">Disponibles</div>
+      </div>
+    </div>
+    <div class="ms">
+      <div class="ms-icon" style="background:#fff8e1;color:#854F0B">
+        <i class="ti ti-clock"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ totalEnCours }}</div>
+        <div class="ms-l">En cours</div>
+      </div>
+    </div>
+    <div class="ms">
+      <div class="ms-icon" style="background:#e3f2fd;color:#185FA5">
+        <i class="ti ti-heart-handshake"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ totalAdoptes }}</div>
+        <div class="ms-l">Adoptés</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="ti ti-search"></i>
+      <input
+        type="text"
+        placeholder="Rechercher par nom, prénom, n° de dossier..."
+        [(ngModel)]="recherche"
+        (input)="appliquerFiltres()"
+      />
+    </div>
+    <select class="filter-btn" [(ngModel)]="filtreStatut" (change)="appliquerFiltres()">
+      <option value="">Tous les statuts</option>
+      <option value="DISPONIBLE">Disponible</option>
+      <option value="EN_COURS">En cours d'adoption</option>
+      <option value="ADOPTE">Adopté</option>
+    </select>
+    <select class="filter-btn" [(ngModel)]="filtreSexe" (change)="appliquerFiltres()">
+      <option value="">Tous les sexes</option>
+      <option value="Masculin">Masculin</option>
+      <option value="Féminin">Féminin</option>
+    </select>
+    <select class="filter-btn" [(ngModel)]="filtreActivite" (change)="appliquerFiltres()">
+      <option value="">Tous</option>
+      <option value="actif">Actifs</option>
+      <option value="inactif">Désactivés</option>
+    </select>
+    <div class="count-badge">{{ orphelinsFiltres.length }} dossier(s)</div>
+  </div>
+
+  <div class="loading" *ngIf="chargement">
+    <i class="ti ti-loader-2"></i> Chargement...
+  </div>
+
+  <div class="table-card" *ngIf="!chargement">
+    <table>
+        <thead>
+        <tr>
+          <th>N° DOSSIER</th>
+          <th>ENFANT</th>
+          <th>ÂGE</th>
+          <th>SEXE</th>
+          <th>SITUATION</th>
+          <th>STATUT</th>
+          <th>ÉTAT</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="orphelinsPage.length === 0">
+          <td colspan="7" class="empty">
+            <i class="ti ti-search-off"></i>
+            Aucun dossier trouvé
+          </td>
+        </tr>
+        <tr *ngFor="let o of orphelinsPage" [class.row-inactif]="!o.actif">
+          <td class="num-cell">{{ o.numeroDossier }}</td>
+          <td>
+            <div class="user-cell">
+              <div class="u-avatar" [ngClass]="getAvatarClass(o.sexe)">
+                {{ getInitiales(o) }}
+              </div>
+              <div>
+                <div class="u-name">
+                  {{ o.nom }} {{ o.prenom }}
+                  <span class="badge-inactif" *ngIf="!o.actif">Désactivé</span>
+                </div>
+                <div class="u-email">{{ o.regionOrigine }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="text-muted">{{ o.age }} ans</td>
+          <td>
+            <span class="sexe-tag" [class.sx-m]="o.sexe === 'Masculin'" [class.sx-f]="o.sexe === 'Féminin'">
+              {{ o.sexe }}
+            </span>
+          </td>
+          <td class="text-muted">{{ o.situationFamiliale }}</td>
+          <td>
+            <span class="status-pill" [ngClass]="getStatutClass(o.statut)">
+              <span class="status-dot"></span>
+              {{ getStatutLabel(o.statut) }}
+            </span>
+          </td>
+           <td>
+            <span class="etat-pill" [class.e-actif]="o.actif" [class.e-inactif]="!o.actif">
+              <span class="etat-dot" [style.background]="o.actif ? '#006633' : '#CC0000'"></span>
+              {{ o.actif ? 'Actif' : 'Désactivé' }}
+            </span>
+          </td>
+          <td (click)="$event.stopPropagation()">
+            <div class="actions">
+              <button class="act-btn" (click)="modifierOrphelin(o.id)">
+                <i class="ti ti-edit"></i>
+              </button>
+              <button class="more-btn" (click)="toggleMenu(o.id, $event)">
+                <i class="ti ti-dots-vertical"></i>
+              </button>
+              <div class="dropdown" [class.open]="menuOuvert === o.id">
+                <div class="dd-item" (click)="voirDetail(o.id)">
+                  <i class="ti ti-eye"></i> Lire Plus
+                </div>
+            
+                <div class="dd-sep"></div>
+                <div class="dd-item"
+                  [class.red]="o.actif"
+                  [class.green]="!o.actif"
+                  (click)="ouvrirModalSuppression(o, $event)">
+                  <i [class]="o.actif ? 'ti ti-toggle-left' : 'ti ti-toggle-right'"></i>
+                  {{ o.actif ? 'Désactiver' : 'Réactiver' }}
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" *ngIf="!chargement && orphelinsFiltres.length > 0">
+    <div class="per-page">
+      Afficher
+      <select [(ngModel)]="parPage" (change)="appliquerFiltres()">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+      par page
+    </div>
+    <div class="page-info">
+      Affichage de {{ debutAffichage }} à {{ finAffichage }}
+      sur {{ orphelinsFiltres.length }} résultats
+    </div>
+    <div class="page-btns">
+      <div class="page-btn-nav" (click)="changerPage(pageActuelle - 1)">
+        <i class="ti ti-chevron-left"></i>
+      </div>
+      <div
+        class="page-btn"
+        *ngFor="let p of pages"
+        [class.on]="pageActuelle === p"
+        (click)="changerPage(p)"
+      >{{ p }}</div>
+      <div class="page-btn-nav" (click)="changerPage(pageActuelle + 1)">
+        <i class="ti ti-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" [class.open]="modalOuvert" (click)="fermerModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-icon" [style.background]="orphelinASupprimer?.actif ? '#fff3e0' : '#e8f5e9'">
+      <i class="ti"
+        [class.ti-toggle-left]="orphelinASupprimer?.actif"
+        [class.ti-toggle-right]="!orphelinASupprimer?.actif"
+        [style.color]="orphelinASupprimer?.actif ? '#e65100' : '#006633'"
+        style="font-size:24px"></i>
+    </div>
+    <h3>{{ orphelinASupprimer?.actif ? 'Désactiver' : 'Réactiver' }} ce dossier ?</h3>
+    <p>
+      Le dossier de
+      <strong>{{ orphelinASupprimer?.nom }} {{ orphelinASupprimer?.prenom }}</strong>
+      ({{ orphelinASupprimer?.numeroDossier }})
+      {{ orphelinASupprimer?.actif
+        ? 'sera retiré de la liste active. Vous pourrez le réactiver à tout moment.'
+        : 'sera de nouveau visible dans la liste active.' }}
+    </p>
+    <div class="modal-actions">
+      <button class="modal-cancel" (click)="fermerModal()">Annuler</button>
+      <button class="modal-confirm"
+        [class.confirm-red]="orphelinASupprimer?.actif"
+        [class.confirm-green]="!orphelinASupprimer?.actif"
+        (click)="confirmerToggle()">
+        {{ orphelinASupprimer?.actif ? 'Désactiver' : 'Réactiver' }}
+      </button>
+    </div>
+  </div>
+</div>

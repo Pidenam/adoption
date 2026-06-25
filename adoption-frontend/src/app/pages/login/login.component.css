@@ -1,0 +1,168 @@
+.page-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 50%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-circle1 {
+  position: absolute; top: -100px; right: -100px;
+  width: 350px; height: 350px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.bg-circle2 {
+  position: absolute; bottom: -120px; left: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.bg-circle3 {
+  position: absolute; top: 50%; left: 30%;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,215,0,0.05);
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 880px;
+  /* max-width = la carte ne dépasse jamais 880px */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+  /* ombre profonde pour l'effet flottant */
+  position: relative;
+  z-index: 1;
+}
+
+.left {
+  background: linear-gradient(145deg, #005528 0%, #003d1c 100%);
+  padding: 36px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.circle1 {
+  position: absolute; top: -60px; right: -60px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.circle2 {
+  position: absolute; bottom: -70px; left: -40px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+
+.flag-deco { display: flex; gap: 3px; margin-bottom: 18px; }
+.fd { width: 4px; height: 24px; border-radius: 2px; display: inline-block; }
+
+.left-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.9);
+  font-size: 10px; padding: 5px 12px;
+  border-radius: 20px; font-weight: 500;
+}
+
+.left-icon { font-size: 36px; margin: 18px 0 12px; }
+
+.left-title {
+  font-size: 20px; font-weight: 600;
+  color: white; line-height: 1.35;
+}
+
+.left-sub {
+  font-size: 11px; color: rgba(255,255,255,0.6);
+  margin-top: 10px; line-height: 1.7;
+}
+
+.stats { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
+.stat-n { font-size: 20px; font-weight: 700; color: #FFD100; }
+.stat-l { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+.left-foot {
+  font-size: 9px; color: rgba(255,255,255,0.3); line-height: 1.6;
+  margin-top: 20px;
+}
+
+.right {
+  background: #ffffff;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.togo-stripe {
+  display: flex; height: 4px;
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 22px;
+}
+.togo-stripe span { flex: 1; }
+
+.uc-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; padding: 4px 10px; border-radius: 20px;
+  font-weight: 600; margin-bottom: 16px;
+  background: #e8f5e9; color: #006633;
+  border: 1px solid #c8e6c9; width: fit-content;
+}
+
+.form-head { margin-bottom: 20px; }
+.form-head h2 { font-size: 19px; font-weight: 600; color: #1a1a1a; }
+.form-head p { font-size: 12px; color: #777; margin-top: 3px; }
+
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 10px; font-weight: 600;
+  color: #555; margin-bottom: 5px; letter-spacing: 0.3px;
+}
+
+.finput {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  border: 1.5px solid #e8e8e8; border-radius: 8px;
+  background: #fafafa; transition: border 0.2s;
+}
+.finput:focus-within { border-color: #006633; }
+.finput input {
+  flex: 1; border: none; background: transparent;
+  font-size: 12px; color: #333; outline: none;
+}
+.finput .icon { font-size: 14px; }
+.finput .eye { cursor: pointer; font-size: 14px; margin-left: auto; }
+
+.forgot { text-align: right; margin: -6px 0 14px; }
+.forgot a { font-size: 11px; color: #006633; text-decoration: none; font-weight: 500; }
+
+.btn {
+  width: 100%; padding: 12px;
+  border-radius: 8px; border: none;
+  background: linear-gradient(135deg, #006633, #004d26);
+  color: white; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+  letter-spacing: 0.2px;
+}
+.btn:hover { opacity: 0.88; }
+
+.sep {
+  display: flex; align-items: center;
+  gap: 10px; margin: 16px 0;
+}
+.sep-line { flex: 1; height: 1px; background: #eee; }
+.sep-txt { font-size: 9px; color: #bbb; white-space: nowrap; }
+
+.roles { display: flex; flex-direction: column; gap: 7px; }
+.role-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid #e8e8e8; border-radius: 8px;
+  font-size: 11px; color: #555; background: #fafafa;
+}

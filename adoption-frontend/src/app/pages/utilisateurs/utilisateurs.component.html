@@ -1,0 +1,237 @@
+<div class="page" (click)="fermerMenus()">
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1><i class="ti ti-users"></i> Gestion des utilisateurs</h1>
+      <p>Gérez les comptes du personnel du Comité National d'Adoption</p>
+    </div>
+    <button class="btn-create" (click)="creerUtilisateur()">
+      <i class="ti ti-user-plus"></i> Nouvel utilisateur
+    </button>
+  </div>
+
+  <div class="mini-stats">
+    <div class="ms">
+      <div class="ms-icon" style="background:#e8f5e9;color:#006633">
+        <i class="ti ti-users"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ utilisateurs.length }}</div>
+        <div class="ms-l">Total</div>
+      </div>
+    </div>
+    <div class="ms">
+      <div class="ms-icon" style="background:#fff8e1;color:#b8860b">
+        <i class="ti ti-crown"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ totalPresidents }}</div>
+        <div class="ms-l">Président(s)</div>
+      </div>
+    </div>
+    <div class="ms">
+      <div class="ms-icon" style="background:#e3f2fd;color:#1565c0">
+        <i class="ti ti-user-check"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ totalActifs }}</div>
+        <div class="ms-l">Actifs</div>
+      </div>
+    </div>
+    <div class="ms">
+      <div class="ms-icon" style="background:#ffebee;color:#CC0000">
+        <i class="ti ti-user-off"></i>
+      </div>
+      <div>
+        <div class="ms-n">{{ totalInactifs }}</div>
+        <div class="ms-l">Inactifs</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="ti ti-search"></i>
+      <input
+        type="text"
+        placeholder="Rechercher par nom, email, rôle..."
+        [(ngModel)]="recherche"
+        (input)="appliquerFiltres()"
+      />
+    </div>
+    <select class="filter-btn" [(ngModel)]="filtreRole" (change)="appliquerFiltres()">
+      <option value="">Tous les rôles</option>
+      <option value="PRESIDENT">Président</option>
+      <option value="SECRETAIRE">Secrétaire</option>
+      <option value="AGENT_SOCIAL">Agent Social</option>
+      <option value="ADMINISTRATEUR">Administrateur</option>
+    </select>
+    <select class="filter-btn" [(ngModel)]="filtreStatut" (change)="appliquerFiltres()">
+      <option value="">Tous les statuts</option>
+      <option value="actif">Actifs</option>
+      <option value="inactif">Inactifs</option>
+    </select>
+    <div class="count-badge">{{ utilisateursFiltres.length }} utilisateur(s)</div>
+  </div>
+
+  <div class="loading" *ngIf="chargement">
+    <i class="ti ti-loader-2"></i> Chargement...
+  </div>
+
+  <div class="table-card" *ngIf="!chargement">
+    <table>
+      <thead>
+        <tr>
+          <th>UTILISATEUR</th>
+          <th>TÉLÉPHONE</th>
+          <th>RÔLE</th>
+          <th>STATUT</th>
+          <th>DATE CRÉATION</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="utilisateursPage.length === 0">
+          <td colspan="6" class="empty">
+            <i class="ti ti-search-off"></i>
+            Aucun utilisateur trouvé
+          </td>
+        </tr>
+        <tr *ngFor="let u of utilisateursPage">
+          <td>
+            <div class="user-cell">
+              <div class="u-avatar" [ngClass]="getAvatarClass(u.roleNom)">
+                {{ getInitiales(u) }}
+              </div>
+              <div>
+                <div class="u-name">{{ u.nom }} {{ u.prenom }}</div>
+                <div class="u-email">{{ u.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="text-muted">{{ u.telephone || '—' }}</td>
+          <td>
+            <span class="role-pill" [ngClass]="getRoleClass(u.roleNom)">
+              <i [class]="getRoleIcon(u.roleNom)"></i>
+              {{ u.roleNom }}
+            </span>
+          </td>
+          <td>
+            <span class="status-pill" [class.s-actif]="u.actif" [class.s-inactif]="!u.actif">
+              <span class="status-dot" [style.background]="u.actif ? '#006633' : '#CC0000'"></span>
+              {{ u.actif ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td class="text-muted">{{ u.dateCreation | date:'dd/MM/yyyy' }}</td>
+          <td (click)="$event.stopPropagation()">
+  <div class="actions">
+    <button class="act-btn" (click)="modifierUtilisateur(u.id)">
+      <i class="ti ti-edit"></i>
+    </button>
+    <button class="more-btn"
+      *ngIf="!estPresident(u)"
+      (click)="toggleMenu(u.id, $event)">
+      <i class="ti ti-dots-vertical"></i>
+    </button>
+    <div class="dropdown" [class.open]="menuOuvert === u.id">
+      <div class="dd-item"
+        [class.red]="u.actif"
+        [class.green]="!u.actif"
+        (click)="ouvrirModal(u, $event)">
+        <i [class]="u.actif ? 'ti ti-toggle-left' : 'ti ti-toggle-right'"></i>
+        {{ u.actif ? 'Désactiver' : 'Activer' }}
+      </div>
+      <div class="dd-sep"></div>
+      <div class="dd-item red" (click)="ouvrirModalSuppression(u, $event)">
+        <i class="ti ti-trash"></i> Supprimer
+      </div>
+    </div>
+  </div>
+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" *ngIf="!chargement && utilisateursFiltres.length > 0">
+    <div class="per-page">
+      Afficher
+      <select [(ngModel)]="parPage" (change)="pageActuelle = 1">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+      par page
+    </div>
+    <div class="page-info">
+      Affichage de {{ debutAffichage }} à {{ finAffichage }}
+      sur {{ utilisateursFiltres.length }} résultats
+    </div>
+    <div class="page-btns">
+      <div class="page-btn-nav" (click)="changerPage(pageActuelle - 1)">
+        <i class="ti ti-chevron-left"></i>
+      </div>
+      <div
+        class="page-btn"
+        *ngFor="let p of pages"
+        [class.on]="pageActuelle === p"
+        (click)="changerPage(p)"
+      >{{ p }}</div>
+      <div class="page-btn-nav" (click)="changerPage(pageActuelle + 1)">
+        <i class="ti ti-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal activation/désactivation -->
+<div class="modal-overlay" [class.open]="modalOuvert" (click)="fermerModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-icon">
+      <i class="ti ti-alert-triangle"></i>
+    </div>
+    <h3>{{ utilisateurSelectionne?.actif ? 'Désactiver' : 'Activer' }} cet utilisateur ?</h3>
+    <p>
+      <strong>{{ utilisateurSelectionne?.prenom }} {{ utilisateurSelectionne?.nom }}</strong>
+      {{ utilisateurSelectionne?.actif
+        ? 'ne pourra plus accéder à la plateforme.'
+        : 'pourra de nouveau accéder à la plateforme.' }}
+      Vous pourrez modifier ce statut à tout moment.
+    </p>
+    <div class="modal-actions">
+      <button class="modal-cancel" (click)="fermerModal()">Annuler</button>
+      <button
+        class="modal-confirm"
+        [class.confirm-red]="utilisateurSelectionne?.actif"
+        [class.confirm-green]="!utilisateurSelectionne?.actif"
+        (click)="confirmerToggle()"
+      >
+        {{ utilisateurSelectionne?.actif ? 'Désactiver' : 'Activer' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal suppression -->
+<div class="modal-overlay" [class.open]="modalSuppressionOuvert" (click)="fermerModalSuppression()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-icon" style="background:#ffebee">
+      <i class="ti ti-trash" style="font-size:24px;color:#CC0000"></i>
+    </div>
+    <h3>Supprimer cet utilisateur ?</h3>
+    <p>
+      <strong>{{ utilisateurASupprimer?.prenom }} {{ utilisateurASupprimer?.nom }}</strong>
+      sera définitivement supprimé de la plateforme.
+      Cette action est <strong>irréversible</strong>.
+    </p>
+    <div class="modal-actions">
+      <button class="modal-cancel" (click)="fermerModalSuppression()">
+        Annuler
+      </button>
+      <button class="modal-confirm confirm-red" (click)="confirmerSuppression()">
+        <i class="ti ti-trash"></i> Supprimer définitivement
+      </button>
+    </div>
+  </div>
+</div>

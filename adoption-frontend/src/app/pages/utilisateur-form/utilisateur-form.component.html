@@ -1,0 +1,208 @@
+<div class="form-page">
+
+  <div class="breadcrumb">
+    <span class="link" (click)="annuler()">
+      <i class="ti ti-arrow-left"></i> Utilisateurs
+    </span>
+    <i class="ti ti-chevron-right"></i>
+    <span>{{ mode === 'creation' ? 'Nouvel utilisateur' : 'Modifier utilisateur' }}</span>
+  </div>
+
+  <div class="form-layout">
+
+    <div class="form-card">
+      <div class="form-card-head">
+        <div class="head-icon">
+          <i [class]="mode === 'creation' ? 'ti ti-user-plus' : 'ti ti-user-edit'"></i>
+        </div>
+        <div>
+          <h2>{{ mode === 'creation' ? 'Créer un compte utilisateur' : 'Modifier le compte' }}</h2>
+          <p>{{ mode === 'creation' ? 'Renseignez les informations du nouveau membre' : 'Modifiez les informations du compte' }}</p>
+        </div>
+      </div>
+
+      <div class="form-body">
+
+        <div class="alert alert-error" *ngIf="erreur">
+          <i class="ti ti-alert-circle"></i> {{ erreur }}
+        </div>
+        <div class="alert alert-success" *ngIf="succes">
+          <i class="ti ti-circle-check"></i> {{ succes }}
+        </div>
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>NOM <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.nom">
+              <i class="ti ti-user"></i>
+              <input
+                type="text"
+                [(ngModel)]="form.nom"
+                placeholder="Ex: TCHODOU"
+                (input)="updatePreview()"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>PRÉNOM <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.prenom">
+              <i class="ti ti-user"></i>
+              <input
+                type="text"
+                [(ngModel)]="form.prenom"
+                placeholder="Ex: Reine"
+                (input)="updatePreview()"
+              />
+            </div>
+          </div>
+
+          <div class="field full">
+            <label>ADRESSE EMAIL <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.email">
+              <i class="ti ti-mail"></i>
+              <input
+                type="email"
+                [(ngModel)]="form.email"
+                placeholder=" Ex:reine&#64;sgaoa.gouv.tg"
+                (input)="updatePreview()"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>TÉLÉPHONE <span class="optional">(optionnel)</span></label>
+            <div class="finput" [class.filled]="form.telephone">
+              <i class="ti ti-phone"></i>
+              <input
+                type="tel"
+                [(ngModel)]="form.telephone"
+                placeholder="+228 90 00 00 00"
+              />
+            </div>
+          </div>
+
+          <div class="field" *ngIf="!estPresident()">
+            <label>RÔLE <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.roleId">
+              <i class="ti ti-shield"></i>
+                <select [(ngModel)]="form.roleId" (change)="updatePreview()">
+                  <option [ngValue]="0" disabled>Choisir un rôle...</option>
+                  <option *ngFor="let r of roles" [ngValue]="r.id">{{ r.nom }}</option>
+                </select>
+            </div>
+          </div>
+
+          <div class="field" *ngIf="estPresident()">
+            <label>RÔLE</label>
+            <div class="finput filled readonly-field">
+              <i class="ti ti-shield"></i>
+              <input type="text" value="PRESIDENT" readonly />
+              <i class="ti ti-lock lock-icon"></i>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label>
+              MOT DE PASSE
+              <span class="required" *ngIf="mode === 'creation'">*</span>
+              <span class="optional" *ngIf="mode === 'edition'">(laisser vide pour ne pas changer)</span>
+            </label>
+            <div class="finput" [class.filled]="form.motDePasse">
+              <i class="ti ti-lock"></i>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="form.motDePasse"
+                placeholder="••••••••"
+                (input)="checkPasswordStrength()"
+              />
+              <i
+                [class]="showPassword ? 'ti ti-eye-off' : 'ti ti-eye'"
+                class="eye"
+                (click)="togglePassword()"
+              ></i>
+            </div>
+            <div class="pwd-strength" *ngIf="form.motDePasse">
+              <div class="pwd-bars">
+                <div class="pwd-bar" [ngClass]="getPwdBarClass(1)"></div>
+                <div class="pwd-bar" [ngClass]="getPwdBarClass(2)"></div>
+                <div class="pwd-bar" [ngClass]="getPwdBarClass(3)"></div>
+                <div class="pwd-bar" [ngClass]="getPwdBarClass(4)"></div>
+              </div>
+              <div class="pwd-label" [ngClass]="getPwdLabelClass()">
+                {{ getPwdLabel() }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-cancel" (click)="annuler()">
+            <i class="ti ti-x"></i> Annuler
+          </button>
+          <button
+            class="btn-submit"
+            (click)="onSubmit()"
+            [disabled]="chargement"
+          >
+            <i [class]="chargement ? 'ti ti-loader-2' : 'ti ti-check'"></i>
+            {{ chargement ? 'Enregistrement...' : (mode === 'creation' ? "Créer l'utilisateur" : 'Enregistrer') }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sidebar-col">
+
+      <div class="preview-card">
+        <div class="preview-head">
+          <i class="ti ti-eye"></i> Aperçu du profil
+        </div>
+        <div class="preview-body">
+          <div class="preview-avatar" [ngClass]="getAvatarClass()">
+            {{ getInitiales() }}
+          </div>
+          <div class="preview-name">
+            {{ (form.prenom + ' ' + form.nom).trim() || 'Nom Prénom' }}
+          </div>
+          <div class="preview-email">
+            {{ form.email || 'email@sgaoa.gouv.tg' }}
+          </div>
+          <div class="preview-role" *ngIf="getRoleSelectionne()">
+            <span class="role-pill" [ngClass]="getRoleClass()">
+              {{ getRoleSelectionne() }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card" *ngIf="!estPresident()">
+        <div class="info-card-head">
+          <i class="ti ti-shield"></i> Rôles disponibles
+        </div>
+        <div class="info-body">
+          <div class="ri" *ngFor="let r of rolesInfo" (click)="selectionnerRole(r.id)">
+            <div class="ri-dot" [style.background]="r.couleur"></div>
+            <div>
+              <div class="ri-name">{{ r.nom }}</div>
+              <div class="ri-desc">{{ r.description }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-card">
+        <div class="tips-title">
+          <i class="ti ti-bulb"></i> Conseils
+        </div>
+        <div class="tip"><i class="ti ti-check"></i> Utilisez l'email officiel &#64;sgaoa.gouv.tg</div>
+        <div class="tip"><i class="ti ti-check"></i> Minimum 8 caractères pour le mot de passe</div>
+        <div class="tip"><i class="ti ti-check"></i> Combinez lettres, chiffres et symboles</div>
+      </div>
+
+    </div>
+  </div>
+</div>

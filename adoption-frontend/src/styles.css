@@ -1,0 +1,68 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+/* Boutons actions tableau utilisateurs */
+app-utilisateurs .act-btn,
+app-utilisateurs button.act-btn,
+app-utilisateurs .more-btn,
+app-utilisateurs button.more-btn {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 8px !important;
+  border: 1px solid #e8eaed !important;
+  background: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  color: #666 !important;
+  transition: all 0.2s !important;
+}
+
+app-utilisateurs .act-btn:hover {
+  border-color: #006633 !important;
+  color: #006633 !important;
+  background: #e8f5e9 !important;
+}
+
+app-utilisateurs .more-btn:hover {
+  border-color: #9aa0a6 !important;
+  background: #f8f9fa !important;
+}
+.ti {
+  font-family: 'tabler-icons' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+/* ══ RESPONSIVE GLOBAL ══ */
+* { box-sizing: border-box; }
+
+@media (max-width: 768px) {
+  /* Sidebar cachée sur mobile */
+  .layout {
+    grid-template-columns: 1fr !important;
+  }
+  .sidebar {
+    display: none !important;
+  }
+  .main {
+    margin-left: 0 !important;
+  }
+}

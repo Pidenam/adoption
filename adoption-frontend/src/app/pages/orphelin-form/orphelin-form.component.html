@@ -1,0 +1,275 @@
+<div class="form-page">
+
+  <div class="breadcrumb">
+    <span class="link" (click)="annuler()">
+      <i class="ti ti-arrow-left"></i> Dossiers orphelins
+    </span>
+    <i class="ti ti-chevron-right"></i>
+    <span>{{ mode === 'creation' ? 'Nouveau dossier' : 'Modifier dossier' }}</span>
+  </div>
+
+  <div class="form-layout">
+
+    <div class="form-card">
+      <div class="form-card-head">
+        <div class="head-icon">
+          <i [class]="mode === 'creation' ? 'ti ti-file-plus' : 'ti ti-file-pencil'"></i>
+        </div>
+        <div>
+          <h2>{{ mode === 'creation' ? 'Créer un dossier orphelin' : 'Modifier le dossier' }}</h2>
+          <p>{{ mode === 'creation' ? 'Renseignez les informations de l\'enfant' : 'Modifiez les informations du dossier' }}</p>
+        </div>
+      </div>
+
+      <div class="form-body">
+
+        <div class="alert alert-error" *ngIf="erreur">
+          <i class="ti ti-alert-circle"></i> {{ erreur }}
+        </div>
+        <div class="alert alert-success" *ngIf="succes">
+          <i class="ti ti-circle-check"></i> {{ succes }}
+        </div>
+
+        <div class="section-title">Identité de l'enfant</div>
+        <div class="form-grid">
+
+          <div class="field full" *ngIf="mode === 'edition'">
+            <label>N° DE DOSSIER</label>
+            <div class="finput auto">
+              <i class="ti ti-hash"></i>
+              <input type="text" [value]="numeroDossier" readonly />
+              <i class="ti ti-lock lock-icon"></i>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>NOM <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.nom">
+              <i class="ti ti-user"></i>
+              <input type="text" [(ngModel)]="form.nom" placeholder="Ex: KOMLAN" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>PRÉNOM <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.prenom">
+              <i class="ti ti-user"></i>
+              <input type="text" [(ngModel)]="form.prenom" placeholder="Ex: Ama" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>ÂGE <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.age">
+              <i class="ti ti-calendar"></i>
+              <input type="number" [(ngModel)]="form.age" placeholder="Ex: 7" min="0" max="18" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>SEXE <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.sexe">
+              <i class="ti ti-gender-bigender"></i>
+              <select [(ngModel)]="form.sexe">
+                <option value="" disabled>Choisir...</option>
+                <option value="Masculin">Masculin</option>
+                <option value="Féminin">Féminin</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>SITUATION FAMILIALE <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.situationFamiliale">
+              <i class="ti ti-users-group"></i>
+              <select [(ngModel)]="form.situationFamiliale">
+                <option value="" disabled>Choisir...</option>
+                <option value="Orphelin total">Orphelin total</option>
+                <option value="Orphelin partiel">Orphelin partiel</option>
+                <option value="Abandonné">Abandonné</option>
+                <option value="Enfant trouvé">Enfant trouvé</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>NIVEAU DE SCOLARISATION <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.niveauScolarisation">
+              <i class="ti ti-school"></i>
+              <select [(ngModel)]="form.niveauScolarisation">
+                <option value="" disabled>Choisir...</option>
+                <option value="Non scolarisé">Non scolarisé</option>
+                <option value="Maternelle">Maternelle</option>
+                <option value="Primaire">Primaire</option>
+                <option value="Secondaire">Secondaire</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" *ngIf="mode === 'edition'">
+            <label>STATUT</label>
+            <div class="finput" [class.filled]="form.statut">
+              <i class="ti ti-flag"></i>
+              <select [(ngModel)]="form.statut">
+                <option value="DISPONIBLE">Disponible</option>
+                <option value="EN_COURS">En cours d'adoption</option>
+                <option value="ADOPTE">Adopté</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="section-title">Origine & accueil</div>
+        <div class="form-grid">
+
+          <div class="field">
+            <label>RÉGION D'ORIGINE <span class="required">*</span></label>
+            <div class="finput" [class.filled]="form.regionOrigine">
+              <i class="ti ti-map-pin"></i>
+              <select [(ngModel)]="form.regionOrigine">
+                <option value="" disabled>Choisir...</option>
+                <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>VILLE D'ORIGINE</label>
+            <div class="finput" [class.filled]="form.villeOrigine">
+              <i class="ti ti-building"></i>
+              <input type="text" [(ngModel)]="form.villeOrigine" placeholder="Ex: Lomé" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>STRUCTURE D'ACCUEIL</label>
+            <div class="finput" [class.filled]="form.structureAccueil">
+              <i class="ti ti-home"></i>
+              <input type="text" [(ngModel)]="form.structureAccueil" placeholder="Ex: Orphelinat La Providence" />
+            </div>
+          </div>
+
+        </div>
+
+        <div class="section-title">Santé</div>
+        <div class="form-grid">
+          <div class="field full">
+            <label>ÉTAT DE SANTÉ / BESOINS PARTICULIERS</label>
+            <div class="finput" [class.filled]="form.etatSante">
+              <i class="ti ti-heartbeat"></i>
+              <input type="text" [(ngModel)]="form.etatSante" placeholder="Ex: Bonne santé générale..." />
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+  <h3 class="section-title">Documents justificatifs</h3>
+
+  <div class="doc-upload-row">
+    <div class="doc-label">
+      Acte de naissance <span class="req">*</span>
+      <span class="doc-file" *ngIf="fichierActeNaissance">
+        {{ fichierActeNaissance.name }} ({{ formaterTaille(fichierActeNaissance.size) }})
+      </span>
+    </div>
+    <label class="doc-choose">
+      <input type="file" hidden (change)="onFichierSelectionne($event, 'ACTE_NAISSANCE')"
+             accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+      <i class="ti ti-upload"></i> Choisir
+    </label>
+  </div>
+
+  <div class="doc-upload-row">
+    <div class="doc-label">
+      Déclaration d'abandon <span class="req">*</span>
+      <span class="doc-file" *ngIf="fichierDeclarationAbandon">
+        {{ fichierDeclarationAbandon.name }} ({{ formaterTaille(fichierDeclarationAbandon.size) }})
+      </span>
+    </div>
+    <label class="doc-choose">
+      <input type="file" hidden (change)="onFichierSelectionne($event, 'DECLARATION_ABANDON')"
+             accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+      <i class="ti ti-upload"></i> Choisir
+    </label>
+  </div>
+
+  <div class="doc-upload-row">
+    <div class="doc-label">
+      Ordonnance de placement <span class="req">*</span>
+      <span class="doc-file" *ngIf="fichierOrdonnancePlacement">
+        {{ fichierOrdonnancePlacement.name }} ({{ formaterTaille(fichierOrdonnancePlacement.size) }})
+      </span>
+    </div>
+    <label class="doc-choose">
+      <input type="file" hidden (change)="onFichierSelectionne($event, 'ORDONNANCE_PLACEMENT')"
+             accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+      <i class="ti ti-upload"></i> Choisir
+    </label>
+  </div>
+
+  <label class="doc-add">
+    <input type="file" hidden (change)="onDocumentLibreSelectionne($event)"
+           accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+    <i class="ti ti-plus"></i> Ajouter un autre document (optionnel)
+  </label>
+
+  <div class="doc-libres" *ngIf="documentsLibres.length > 0">
+    <div class="doc-libre-item" *ngFor="let d of documentsLibres">
+      <i class="ti ti-file"></i> {{ d.name }} ({{ formaterTaille(d.size) }})
+    </div>
+  </div>
+
+  <p class="doc-hint">
+    <i class="ti ti-info-circle"></i>
+    Formats acceptés : PDF, images, Word. Les 3 documents marqués * sont obligatoires.
+  </p>
+</div>
+
+        <div class="form-actions">
+          <button class="btn-cancel" (click)="annuler()">
+            <i class="ti ti-x"></i> Annuler
+          </button>
+          <button class="btn-save" (click)="onSubmit()"
+            [disabled]="mode === 'creation' && (!documentsObligatoiresFournis() || uploadEnCours)">
+            {{ uploadEnCours ? 'Enregistrement...' : 'Enregistrer le dossier' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sidebar-col">
+
+      <div class="preview-card">
+        <div class="preview-head">
+          <i class="ti ti-eye"></i> Aperçu du dossier
+        </div>
+        <div class="preview-body">
+          <div class="preview-avatar" [ngClass]="getAvatarClass()">
+            {{ getInitiales() }}
+          </div>
+          <div class="preview-name">
+            {{ (form.nom + ' ' + form.prenom).trim() || 'Nom Prénom' }}
+          </div>
+          <div class="preview-meta" *ngIf="form.age">{{ form.age }} ans</div>
+          <div class="preview-num" *ngIf="mode === 'edition'">{{ numeroDossier }}</div>
+          <div class="preview-status" *ngIf="mode === 'edition'">
+            <span class="status-pill" [ngClass]="getStatutClass()">
+              {{ getStatutLabel(form.statut) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-card">
+        <div class="tips-title">
+          <i class="ti ti-bulb"></i> Informations
+        </div>
+        <div class="tip"><i class="ti ti-check"></i> Le n° de dossier est généré automatiquement</div>
+        <div class="tip"><i class="ti ti-check"></i> Le statut initial est "Disponible"</div>
+        <div class="tip"><i class="ti ti-check"></i> Les champs avec * sont obligatoires</div>
+      </div>
+
+    </div>
+  </div>
+</div>

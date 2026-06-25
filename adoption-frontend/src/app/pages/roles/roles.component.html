@@ -1,0 +1,127 @@
+
+  <div class="roles-page">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Rôles & permissions</h1>
+        <p class="page-sub">Gérez les rôles assignables aux membres du comité</p>
+      </div>
+      <button class="btn-primary" (click)="ouvrirModalCreation()">
+        <i class="ti ti-plus"></i> Nouveau rôle
+      </button>
+    </div>
+
+    <div class="succes-banner" *ngIf="succes">
+      <i class="ti ti-circle-check"></i> {{ succes }}
+    </div>
+
+    <div class="loading-state" *ngIf="loading">
+      <i class="ti ti-loader-2"></i> Chargement...
+    </div>
+
+    <div class="roles-grid" *ngIf="!loading">
+      <div class="role-card" *ngFor="let role of roles" [class.inactif]="!role.actif">
+        <div class="role-card-header">
+          <div class="role-name">{{ role.nom }}</div>
+          <span class="role-badge" [class.badge-actif]="role.actif" [class.badge-inactif]="!role.actif">
+            {{ role.actif ? 'Actif' : 'Inactif' }}
+          </span>
+        </div>
+
+        <div class="role-meta">
+          <i class="ti ti-users"></i> {{ role.nombreUtilisateurs }} utilisateur(s)
+        </div>
+
+        <div *ngIf="role.description" class="role-desc">{{ role.description }}</div>
+
+        <div class="perms-title">Permissions</div>
+        <div class="perms-tags">
+          <span class="perm-tag" *ngFor="let p of role.permissions">{{ p.code }}</span>
+          <span class="perm-tag vide" *ngIf="role.permissions.length === 0">Aucune permission</span>
+        </div>
+
+        <div class="role-actions">
+          <button class="btn-sm" (click)="ouvrirModalEdition(role)">
+            <i class="ti ti-edit"></i> Modifier
+          </button>
+          <button class="btn-sm"
+            [class.btn-danger]="role.actif"
+            [class.btn-success]="!role.actif"
+            (click)="toggleActif(role)">
+            <i class="ti" [class.ti-eye-off]="role.actif" [class.ti-eye]="!role.actif"></i>
+            {{ role.actif ? 'Désactiver' : 'Réactiver' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && roles.length === 0">
+      <i class="ti ti-shield-off"></i>
+      <p>Aucun rôle trouvé</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="modalOuvert" (click)="fermerModal()"></div>
+  <div class="modal" *ngIf="modalOuvert">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ modeEdition ? 'Modifier le rôle' : 'Créer un nouveau rôle' }}</h2>
+      <button class="btn-close" (click)="fermerModal()"><i class="ti ti-x"></i></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="erreur-banner" *ngIf="erreur">
+        <i class="ti ti-alert-circle"></i> {{ erreur }}
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nom du rôle</label>
+          <input class="form-input" type="text" [(ngModel)]="form.nom"
+            (ngModelChange)="onNomChange()" [readOnly]="modeEdition" placeholder="Ex: Superviseur" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Code système (auto-généré)</label>
+          <input class="form-input code-input" type="text" [value]="codeAuto" readonly />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description (optionnelle)</label>
+        <input class="form-input" type="text" [(ngModel)]="form.description" placeholder="Rôle chargé de..." />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Permissions sélectionnées</label>
+        <div class="selected-tags" [class.vide]="permissionsSelectionnees.length === 0">
+          <span *ngIf="permissionsSelectionnees.length === 0" class="hint">Aucune permission sélectionnée</span>
+          <span class="sel-tag" *ngFor="let p of permissionsSelectionnees" (click)="retirerPermission(p)">
+            {{ p.code }} <i class="ti ti-x"></i>
+          </span>
+        </div>
+      </div>
+
+      <label class="form-label">Sélectionner des permissions par module</label>
+      <div class="modules-list">
+        <div class="module-block" *ngFor="let groupe of permissionsParModule">
+          <div class="module-header">
+            <span class="module-name"><i class="ti ti-layout-grid"></i> {{ groupe.module }}</span>
+            <span class="module-count">{{ groupe.permissions.length }} permission(s)</span>
+          </div>
+          <div class="module-perms">
+            <label class="perm-item" *ngFor="let perm of groupe.permissions">
+              <input type="checkbox" [checked]="isSelectionnee(perm)" (change)="togglePermission(perm)" />
+              <span class="perm-code">{{ perm.code }}</span>
+              <span class="perm-desc">— {{ perm.description }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="fermerModal()">Annuler</button>
+      <button class="btn-primary" (click)="enregistrer()">
+        <i class="ti ti-device-floppy"></i> Enregistrer
+      </button>
+    </div>
+  </div>
