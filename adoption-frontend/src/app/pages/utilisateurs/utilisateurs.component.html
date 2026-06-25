@@ -185,7 +185,6 @@
 
 </div>
 
-<!-- Modal activation/désactivation -->
 <div class="modal-overlay" [class.open]="modalOuvert" (click)="fermerModal()">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-icon">
@@ -213,7 +212,6 @@
   </div>
 </div>
 
-<!-- Modal suppression -->
 <div class="modal-overlay" [class.open]="modalSuppressionOuvert" (click)="fermerModalSuppression()">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-icon" style="background:#ffebee">
