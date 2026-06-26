@@ -2,9 +2,9 @@
 
   <aside class="sidebar">
     <div class="sb-logo">
-      <div class="sb-logo-icon"><i class="ti ti-scale"></i></div>
+      <!--div class="sb-logo-icon"><i class="ti ti-scale"></i></div-->
       <div>
-        <div class="sb-logo-txt">Systéme de Gestion Automatiséedes Operations d'Adoptions</div>
+        <div class="sb-logo-txt">Comité National d'Adoption</div>
         <div class="sb-logo-sub">République togolaise</div>
       </div>
     </div>
@@ -20,28 +20,6 @@
       <div class="sb-item" [class.active]="menuActif==='orphelins'"
         (click)="naviguer('orphelins','/orphelins')">
         <i class="ti ti-baby-carriage"></i><span>Orphelins</span>
-        <span class="sb-badge">5</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='adoptants'"
-        (click)="naviguer('adoptants','/adoptants')">
-        <i class="ti ti-heart"></i><span>Adoptants</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='dossiers'"
-        (click)="naviguer('dossiers','/dossiers')">
-        <i class="ti ti-folder-open"></i><span>Dossiers</span>
-        <span class="sb-badge">3</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='adoptions'"
-        (click)="naviguer('adoptions','/adoptions')">
-        <i class="ti ti-refresh"></i><span>Adoptions</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='enquetes'"
-        (click)="naviguer('enquetes','/enquetes')">
-        <i class="ti ti-search"></i><span>Enquêtes sociales</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='paiements'"
-        (click)="naviguer('paiements','/paiements')">
-        <i class="ti ti-credit-card"></i><span>Paiements</span>
       </div>
 
       <div class="sb-section">ADMINISTRATION</div>
@@ -52,14 +30,6 @@
       <div class="sb-item" [class.active]="menuActif==='roles'"
         (click)="naviguer('roles','/roles')">
         <i class="ti ti-shield-lock"></i><span>Rôles & permissions</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='rapports'"
-        (click)="naviguer('rapports','/rapports')">
-        <i class="ti ti-chart-bar"></i><span>Rapports</span>
-      </div>
-      <div class="sb-item" [class.active]="menuActif==='communications'"
-        (click)="naviguer('communications','/communications')">
-        <i class="ti ti-message"></i><span>Communications</span>
       </div>
     </nav>
 
@@ -94,10 +64,10 @@
         </div>
         <div class="tb-sub">{{ dateAujourdhui }}</div>
       </div>
-      <div class="tb-search">
+      <!--div class="tb-search">
         <i class="ti ti-search"></i>
         <input type="text" placeholder="Recherche globale..." [(ngModel)]="rechercheGlobale"/>
-      </div>
+      </div-->
       <div class="tb-right">
         <div class="tb-btn">
           <i class="ti ti-bell"></i>
