@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Adoptant, AdoptantRequest } from '../models/adoptant.model';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdoptantService {
 
-  private apiUrl = 'http://localhost:8080/api/adoptants';
+private apiUrl = `${environment.apiUrl}/api/orphelins`;
 
   constructor(private http: HttpClient) {}
 

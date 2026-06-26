@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Orphelin, OrphelinRequest } from '../models/orphelin.model';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({ providedIn: 'root' })
 export class OrphelinService {
 
-  private apiUrl = 'http://localhost:8080/api/orphelins';
+private apiUrl = `${environment.apiUrl}/api/orphelins`;
 
   constructor(private http: HttpClient) {}
 

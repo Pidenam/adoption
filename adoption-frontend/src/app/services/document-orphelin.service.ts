@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocumentOrphelin } from '../models/document-orphelin.model';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({ providedIn: 'root' })
 export class DocumentOrphelinService {
-  private apiUrl = 'http://localhost:8080/api/documents-orphelin';
+private apiUrl = `${environment.apiUrl}/api/orphelins`;
 
   constructor(private http: HttpClient) {}
 
