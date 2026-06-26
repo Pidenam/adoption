@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentOrphelinService {
-private apiUrl = `${environment.apiUrl}/api/orphelins`;
+private apiUrl = `${environment.apiUrl}/api/documents-orphelin`;
 
   constructor(private http: HttpClient) {}
 

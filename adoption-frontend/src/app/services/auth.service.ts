@@ -11,8 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
 
-private apiUrl = `${environment.apiUrl}/api/orphelins`;
-
+private apiUrl = `${environment.apiUrl}/api/auth`;
   constructor(
     private http: HttpClient,
     private router: Router
